@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+# import os 
+# from dotenv import load_dotenv
+
+# # Inicializa variáveis de ambiente
+# load_dotenv()
+# CONNECTION_STRING = os.getenv("ATLAS_URI")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'core',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -47,6 +56,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # CORS
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'client_register.urls'
@@ -73,12 +85,16 @@ WSGI_APPLICATION = 'client_register.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'igma-db',
+#         'ENFORCE_SCHEMA': False,
+#         'CLIENT':{
+#             'host': CONNECTION_STRING,
+#         }
+#     }
+# }
 
 
 # Password validation
@@ -99,6 +115,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CORS_ORIGIN_ALLOW_ALL = False
+# CORS_ORIGIN_WHITELIST = (
+#     'http://localhost:8081',
+#     "http://127.0.0.1:8000"
+# )
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:0000",
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
