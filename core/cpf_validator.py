@@ -1,5 +1,8 @@
 class CPF():
-    
+    """
+        Essa classe é responsável pela validação do CPF de acordo com algoritmo 
+        da url: https://www.macoratti.net/alg_cpf.htm#:~:text=O
+    """    
     def __init__(self, number=0):
         self.number = None
         if type(number) == str:
@@ -23,9 +26,6 @@ class CPF():
 
         return parsed_number[:11]
 
-    def is_final_digit_valid(self) -> bool:
-        return True if self.parse_cpf()[-1] == self.get_final_digit() else False
-
     def get_first_nine_digits(self) -> str:
         """
             Retorna os primeiros 9 digitos do CPF 
@@ -38,18 +38,23 @@ class CPF():
         """
             Retorna a soma de todos os dígitos do CPF.
         """
+
+        """
+            Caso não seja passado por parâmetro o CPF a ser validado é interpretado
+            que o número a ser validado será os primeiros nove dígitos armazenados no campo
+            self.number
+        """
+
         if(cpf_number == 0):
             number_to_be_validated:str = self.get_first_nine_digits()
-        
         number_to_be_validated = cpf_number
-
-        SUPERIOR_RANGE = len(number_to_be_validated)+1
-        INFERIOR_RANGE = 1
-        STEP = -1
         """
             len(number_to_be_validated) deve ser igual a 9 caso não tenha o primeiro digito verificador validado
             e 10 caso já o tenha validado.
         """
+        SUPERIOR_RANGE = len(number_to_be_validated)+1
+        INFERIOR_RANGE = 1
+        STEP = -1
         
         multiplier_array:list = [iterator for iterator in range(SUPERIOR_RANGE,INFERIOR_RANGE,STEP)]
         number_array = [int(number) for number in number_to_be_validated]
@@ -58,8 +63,6 @@ class CPF():
         for iterator in range(len(number_to_be_validated)):
             sum_value += number_array[iterator]*multiplier_array[iterator]
         
-        print("sum_value")
-        print(sum_value)
         return sum_value
 
     def get_intermediate_verifier_digit_cpf(self) -> str:
@@ -97,14 +100,11 @@ class CPF():
     def get_final_digit(self, sum_cpf_digits:int) -> str:
         """
             Retorna qual seria o verdadeiro dígito final do CPF,
-            trabalha em cima do tamanho do CPF, se será de 9 ou 10 dígitos.
+            independente do tamanho do CPF, se será de 9 ou 10 dígitos.
         """
         final_digit = 0
-        # rest_division = self.sum_cpf_digits() % 11
         rest_division = sum_cpf_digits % 11
 
         if rest_division >= 2:
             final_digit = 11 - rest_division
-        print("str(final_digit)")
-        print(str(final_digit))
         return str(final_digit)
