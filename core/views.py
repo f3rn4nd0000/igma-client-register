@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
-from utils import create_connection_and_return_person_collection
+from utils import create_connection_and_return_person_collection, punctuated_cpf
 from core.cpf_validator import CPF
 from core.util_service import UtilService
 from datetime import datetime
@@ -35,11 +35,15 @@ def createperson(request):
         cpf = str(request_body.get("person_cpf"))
         birthdate = str(request_body.get("person_birthdate"))
 
+        """
+            Invoca classe validadora e retorna o cpf válido com a devida pontuação para comparação com
+            o valor fornecido pelo usuário
+        """
         cpf_validator = CPF(number = cpf)
         valid_cpf = cpf_validator.get_valid_cpf()
+        correct_cpf_format = punctuated_cpf(valid_cpf)
 
-        if(valid_cpf == cpf):
-            correct_cpf_format = valid_cpf[:3]+'.'+valid_cpf[3:6]+'.'+valid_cpf[6:9]+'-'+valid_cpf[9:11]
+        if(correct_cpf_format == cpf):
 
             # Converte data para o formato pt-BR dd/mm/yyyy
             try:
@@ -59,12 +63,9 @@ def createperson(request):
             person_collection = create_connection_and_return_person_collection()
             if person_collection.count_documents({ 'cpf': correct_cpf_format }):
                 return JsonResponse({"error": "Já existe esse cadastro no banco, tente novamente com outro CPF!"})
-            print(person_collection)
-            return_value = person_collection.insert_one(new_object_person)
-            print("return_value")
-            print(loads(return_value))
+            
+            person_collection.insert_one(new_object_person)
             print("Cadastro de pessoa concluído com sucesso!")
-
             return redirect('index')
         else:
             return JsonResponse({"error": "422, o CPF é inválido, tente novamente"} )
@@ -79,7 +80,7 @@ def return_person_by_cpf(request, person_cpf):
         print(">>>>"+str(person_cpf))
         person_collection = create_connection_and_return_person_collection()
         # parsed_cpf_value = CPF.parse_cpf(cpf_value)
-        cursor_retrieve_desired_person = person_collection.find_one({"cpf": person_cpf})
+        cursor_retrieve_desired_person = person_collection.find_one({"cpf": punctuated_cpf(person_cpf)})
         print(cursor_retrieve_desired_person)
         if cursor_retrieve_desired_person:
             util_service = UtilService()
