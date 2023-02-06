@@ -5,7 +5,6 @@ from utils import create_connection_and_return_person_collection, punctuated_cpf
 from core.cpf_validator import CPF
 from core.util_service import UtilService
 from datetime import datetime
-from bson.json_util import loads
 import json
 
 
@@ -26,7 +25,7 @@ def createperson(request):
         Rota responsável pela criação de novos usuários
     """
     if request.method == 'GET':
-        return JsonResponse({"message":"No body specified"})
+        return JsonResponse({"message":"Sem corpo especificado"})
 
     if request.method == 'POST':
         
@@ -80,6 +79,7 @@ def return_person_by_cpf(request, person_cpf):
         print(">>>>"+str(person_cpf))
         person_collection = create_connection_and_return_person_collection()
         # parsed_cpf_value = CPF.parse_cpf(cpf_value)
+        print(punctuated_cpf(person_cpf))
         cursor_retrieve_desired_person = person_collection.find_one({"cpf": punctuated_cpf(person_cpf)})
         print(cursor_retrieve_desired_person)
         if cursor_retrieve_desired_person:
@@ -87,5 +87,5 @@ def return_person_by_cpf(request, person_cpf):
             parsed_cursor = util_service.parse_cursor(cursor_retrieve_desired_person)
             return JsonResponse({"people": parsed_cursor}, safe = False)
         else:
-            return JsonResponse({"error": "404 Not Found"})
+            return JsonResponse({"error": "404 Não encontrado"})
 
