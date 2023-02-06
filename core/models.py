@@ -5,4 +5,4 @@ from django.utils import timezone
 class PersonModel(models.Model):
     name = models.CharField(max_length=40, blank=False, default='')
     cpf = models.CharField(max_length=11,blank=False, default='')
-    birthdate = models.DateField(max_length=10, default=timezone.now)
+    birthdate = models.DateField(max_length=10, default=timezone.now, )
