@@ -42,7 +42,7 @@ def createperson(request):
         valid_cpf = cpf_validator.get_valid_cpf()
         correct_cpf_format = punctuated_cpf(valid_cpf)
 
-        if(correct_cpf_format == cpf):
+        if(correct_cpf_format == punctuated_cpf(cpf)):
 
             # Converte data para o formato pt-BR dd/mm/yyyy
             try:
