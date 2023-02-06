@@ -1,3 +1,4 @@
+from bson.json_util import dumps
 
 class UtilService:
     """
@@ -45,11 +46,8 @@ class UtilService:
         for key, value in cursor.items():
             if "_id" in key:
                 parsed_cursor["id"] = str(value["$oid"])
-                print("if parsed_cursor")
             else:
                 parsed_cursor[ UtilService.trimStr(key) ] = UtilService.parseList( value )
-                print("else parsed_cursor")
-                print(parsed_cursor)
         
         return parsed_cursor
 

@@ -2,8 +2,8 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
 
 ### Personal files to deploy on fly.io
-fly.toml
 Dockerfile
+fly.toml
 
 
 ### Django ###

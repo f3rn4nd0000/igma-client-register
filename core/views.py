@@ -1,11 +1,11 @@
-from utils import create_connection_and_return_person_collection
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
+from utils import create_connection_and_return_person_collection
 from core.cpf_validator import CPF
+from core.util_service import UtilService
 from datetime import datetime
 from bson.json_util import loads
-from util_service import UtilService
 import json
 
 
